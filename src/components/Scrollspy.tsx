@@ -25,6 +25,7 @@ export interface ScrollspyProps {
   itemClassName?: string;
   containerElement?: JSX.Element;
   itemElement?: JSX.Element;
+  scrollOffset: number;
 }
 
 export interface ScrollspyState {
@@ -98,10 +99,11 @@ export default class Scrollspy extends React.Component<
   };
 
   private scrollTo(element: HTMLElement) {
-    element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest"
+    const {scrollOffset} = this.props || 0
+    const yCoordinate = element.getBoundingClientRect().top + window.pageYOffset;
+    window.scrollTo({
+      top: yCoordinate + scrollOffset,
+      behavior: 'smooth'
     });
   }
 
