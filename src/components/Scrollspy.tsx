@@ -53,6 +53,7 @@ export default class Scrollspy extends React.Component<
   private timer: number;
 
   private spy() {
+    //   console.log(this.props.ids)
     const items = this.props.ids
       .map(id => {
         const element = document.getElementById(id);
@@ -69,11 +70,19 @@ export default class Scrollspy extends React.Component<
 
     const firstTrueItem = items.find(item => !!item && item.inView);
 
-    if (!firstTrueItem) {
+    if (items.length !== this.state.items.length) {
+        const update = items.map((item, index) => {
+            const inView = index === 0
+            return { ...item, inView } as SpyItem;
+        });
+
+        this.setState({ items: update });
+    } else if (!firstTrueItem) {
       return; // dont update state
     } else {
       const update = items.map(item => {
-        return { ...item, inView: item === firstTrueItem } as SpyItem;
+        const inView = firstTrueItem ? item && item.element === firstTrueItem.element : item && item.inView
+        return { ...item, inView } as SpyItem;
       });
 
       this.setState({ items: update });
